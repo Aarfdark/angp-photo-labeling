@@ -1,6 +1,8 @@
 from PIL import Image, ImageDraw, ImageFont
 import os
 import csv
+import tkinter as tk
+from tkinter import messagebox, ttk
 
 def senior_name_img(filename, destination):
     #load image
@@ -9,7 +11,7 @@ def senior_name_img(filename, destination):
     except:
         print("Error opening image:", filename)
         return
-    filename = filename.split("/")[1]
+    filename = filename.split("/")[-1]
     img_width = img.size[0]
     img_height = img.size[1]
 
@@ -44,7 +46,7 @@ def senior_name_img(filename, destination):
     try:
         img.save(folder + filename[:filename.find(".")] + "_text.jpg", quality=95)
     except OSError:
-        print(filename, "did not work")
+        print("Saving " + filename +  " did not work")
 
 def baby_name_img(filename, destination, csv_file):
     #load image
@@ -95,20 +97,86 @@ def baby_name_img(filename, destination, csv_file):
         print(filename, "did not work")
         return
 
-def main():
-    dict = {}
-    with open("Test Baby.csv", "r") as file:
-        csv_file = csv.reader(file)
-        for lines in csv_file:
-            dict[lines[0].lower()] = lines[1]
+def run_loop(directory_name, destination_dir, csv_file, baby_or_senior):
+    if(directory_name == "" or destination_dir == "" or baby_or_senior == ""):
+        tk.messagebox.showinfo("Error", "Please fill in all required fields.")
+        return
+    if(baby_or_senior == "b" and csv_file == ""):
+        tk.messagebox.showinfo("Error", "To select Baby, you must provide a path to a csv file.")
+        return
 
-    directory_name = "input"
-    destination_dir = "output"
+    if(baby_or_senior == "b"):
+        dict = {}
+        with open(csv_file, "r") as file:
+            baby_numbers = csv.reader(file)
+            for lines in baby_numbers:
+                dict[lines[0].lower()] = lines[1]
+
     for f in os.listdir(directory_name):
         if(f.endswith(".jpg") or f.endswith(".JPG") or f.endswith(".jpeg") or f.endswith(".JPEG")):
-            baby_name_img(directory_name + "/" + f, destination_dir, dict)
+            if baby_or_senior == "b":
+                baby_name_img(directory_name + "/" + f, destination_dir, dict)
+            else:
+                senior_name_img(directory_name + "/" + f, destination_dir)
         else:
-            print(f)
+            print(f + " is not a jpg file")
+
+def main():
+
+    #establish the tkinter window
+    root = tk.Tk()
+    root.title("Add Text to Picture")
+    window_width = 300
+    window_height = 300
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    x_coord = int(screen_width/2 - window_width/2)
+    y_coord = int(screen_height/2 - window_height/2)
+    root.geometry(f"{window_width}x{window_height}+{x_coord}+{y_coord}")
+
+    #store directories/csv
+    directory_name = tk.StringVar()
+    destination_dir = tk.StringVar()
+    csv_file = tk.StringVar()
+    baby_or_senior = tk.StringVar()
+
+    #create the widgets
+    #input
+    input_label = ttk.Label(root, text="Paste the path to the input folder here:")
+    input_label.pack(fill='x', expand=True)
+
+    input_entry = ttk.Entry(root, textvariable=directory_name)
+    input_entry.pack(fill='x', expand=True)
+    input_entry.focus()
+
+    #output
+    destination_label = ttk.Label(root, text="Paste the path to the destination folder here:")
+    destination_label.pack(fill='x', expand=True)
+
+    destination_entry = ttk.Entry(root, textvariable=destination_dir)
+    destination_entry.pack(fill='x', expand=True)
+
+    #csv
+    csv_label = ttk.Label(root, text="Paste the path to the csv file here:")
+    csv_label.pack(fill='x', expand=True)
+
+    csv_entry = ttk.Entry(root, textvariable=csv_file)
+    csv_entry.pack(fill='x', expand=True)
+
+    #baby or senior
+    baby_or_senior_label = ttk.Label(root, text="Baby or Senior?")
+    baby_or_senior_label.pack(fill='x', expand=True)
+
+    baby = ttk.Radiobutton(root, text="Baby", value="b", variable=baby_or_senior)
+    baby.pack(fill='x', expand=True)
+    senior = ttk.Radiobutton(root, text="Senior", value="s", variable=baby_or_senior)
+    senior.pack(fill='x', expand=True)
+
+    #submit button
+    submit = ttk.Button(root, text="Submit", command=lambda: run_loop(directory_name.get(), destination_dir.get(), csv_file.get(), baby_or_senior.get()))
+    submit.pack(fill='x', expand=True, pady=10)
+
+    root.mainloop()
 
 if __name__ == "__main__":
     main()
