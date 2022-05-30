@@ -156,35 +156,22 @@ def main():
     input_label = ttk.Label(root, text="Choose the input folder here:")
     input_label.pack(fill='x', expand=True)
 
-    # input_entry = ttk.Entry(root, textvariable=directory_name)
-    # input_entry.pack(fill='x', expand=True)
-    # input_entry.focus()
-    ############################################
     input_entry = ttk.Button(root, text="Select Folder", command=lambda: folder_select(root, directory_name))
     input_entry.pack(fill='x', expand=True)
-    ############################################
 
     #output
     destination_label = ttk.Label(root, text="Paste the path to the destination folder here:")
     destination_label.pack(fill='x', expand=True)
 
-    # destination_entry = ttk.Entry(root, textvariable=destination_dir)
-    # destination_entry.pack(fill='x', expand=True)
-    ############################################
     destination_entry = ttk.Button(root, text="Select Folder", command=lambda: folder_select(root, destination_dir))
     destination_entry.pack(fill='x', expand=True)
-    ############################################
 
     #csv
     csv_label = ttk.Label(root, text="Paste the path to the csv file here:")
     csv_label.pack(fill='x', expand=True)
 
-    # csv_entry = ttk.Entry(root, textvariable=csv_file)
-    # csv_entry.pack(fill='x', expand=True)
-    ############################################
     csv_entry = ttk.Button(root, text="Select File", command=lambda: file_select(root, csv_file))
     csv_entry.pack(fill='x', expand=True)
-    ############################################
 
     #baby or senior
     baby_or_senior_label = ttk.Label(root, text="Baby or Senior?")
