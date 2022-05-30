@@ -120,16 +120,18 @@ def run_loop(directory_name, destination_dir, csv_file, baby_or_senior):
                 senior_name_img(directory_name + "/" + f, destination_dir)
         else:
             print(f + " is not a jpg file")
+    
+    tk.messagebox.showinfo("Success", "Done!")
 
-def folder_select(root, stringvar):
+def folder_select(root, stringvar, io):
     filename = filedialog.askdirectory()
-    selected = ttk.Label(root, text=filename)
+    selected = ttk.Label(root, text=io+filename)
     selected.pack()
     stringvar.set(filename)
 
 def file_select(root, stringvar):
     filename = filedialog.askopenfilename()
-    selected = ttk.Label(root, text=filename)
+    selected = ttk.Label(root, text="CSV FILE: " + filename)
     selected.pack()
     stringvar.set(filename)
 
@@ -156,14 +158,14 @@ def main():
     input_label = ttk.Label(root, text="Choose the input folder here:")
     input_label.pack(fill='x', expand=True)
 
-    input_entry = ttk.Button(root, text="Select Folder", command=lambda: folder_select(root, directory_name))
+    input_entry = ttk.Button(root, text="Select Folder", command=lambda: folder_select(root, directory_name, "INPUT FOLDER: "))
     input_entry.pack(fill='x', expand=True)
 
     #output
     destination_label = ttk.Label(root, text="Paste the path to the destination folder here:")
     destination_label.pack(fill='x', expand=True)
 
-    destination_entry = ttk.Button(root, text="Select Folder", command=lambda: folder_select(root, destination_dir))
+    destination_entry = ttk.Button(root, text="Select Folder", command=lambda: folder_select(root, destination_dir, "OUTPUT FOLDER: "))
     destination_entry.pack(fill='x', expand=True)
 
     #csv
