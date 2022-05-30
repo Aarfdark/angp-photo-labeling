@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 import csv
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox, ttk, filedialog
 
 def senior_name_img(filename, destination):
     #load image
@@ -56,7 +56,7 @@ def baby_name_img(filename, destination, csv_file):
         print("Error opening image:", filename)
         return
 
-    filename = filename.split("/")[1]
+    filename = filename.split("/")[-1]
     img_width = img.size[0]
     img_height = img.size[1]
 
@@ -121,13 +121,24 @@ def run_loop(directory_name, destination_dir, csv_file, baby_or_senior):
         else:
             print(f + " is not a jpg file")
 
-def main():
+def folder_select(root, stringvar):
+    filename = filedialog.askdirectory()
+    selected = ttk.Label(root, text=filename)
+    selected.pack()
+    stringvar.set(filename)
 
+def file_select(root, stringvar):
+    filename = filedialog.askopenfilename()
+    selected = ttk.Label(root, text=filename)
+    selected.pack()
+    stringvar.set(filename)
+
+def main():
     #establish the tkinter window
     root = tk.Tk()
     root.title("Add Text to Picture")
-    window_width = 300
-    window_height = 300
+    window_width = 450
+    window_height = 450
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     x_coord = int(screen_width/2 - window_width/2)
@@ -142,26 +153,38 @@ def main():
 
     #create the widgets
     #input
-    input_label = ttk.Label(root, text="Paste the path to the input folder here:")
+    input_label = ttk.Label(root, text="Choose the input folder here:")
     input_label.pack(fill='x', expand=True)
 
-    input_entry = ttk.Entry(root, textvariable=directory_name)
+    # input_entry = ttk.Entry(root, textvariable=directory_name)
+    # input_entry.pack(fill='x', expand=True)
+    # input_entry.focus()
+    ############################################
+    input_entry = ttk.Button(root, text="Select Folder", command=lambda: folder_select(root, directory_name))
     input_entry.pack(fill='x', expand=True)
-    input_entry.focus()
+    ############################################
 
     #output
     destination_label = ttk.Label(root, text="Paste the path to the destination folder here:")
     destination_label.pack(fill='x', expand=True)
 
-    destination_entry = ttk.Entry(root, textvariable=destination_dir)
+    # destination_entry = ttk.Entry(root, textvariable=destination_dir)
+    # destination_entry.pack(fill='x', expand=True)
+    ############################################
+    destination_entry = ttk.Button(root, text="Select Folder", command=lambda: folder_select(root, destination_dir))
     destination_entry.pack(fill='x', expand=True)
+    ############################################
 
     #csv
     csv_label = ttk.Label(root, text="Paste the path to the csv file here:")
     csv_label.pack(fill='x', expand=True)
 
-    csv_entry = ttk.Entry(root, textvariable=csv_file)
+    # csv_entry = ttk.Entry(root, textvariable=csv_file)
+    # csv_entry.pack(fill='x', expand=True)
+    ############################################
+    csv_entry = ttk.Button(root, text="Select File", command=lambda: file_select(root, csv_file))
     csv_entry.pack(fill='x', expand=True)
+    ############################################
 
     #baby or senior
     baby_or_senior_label = ttk.Label(root, text="Baby or Senior?")
