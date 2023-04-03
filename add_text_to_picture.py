@@ -44,7 +44,7 @@ def senior_name_img(filename, destination):
 
     folder = destination + "/"
     try:
-        img.save(folder + filename[:filename.find(".")] + "_text.jpg", quality=95)
+        img.save(folder + filename[:filename.find(".")] + "_senior.jpg", quality=95)
     except OSError:
         print("Saving " + filename +  " did not work")
 
@@ -92,7 +92,7 @@ def baby_name_img(filename, destination, csv_file):
 
     folder = destination + "/"
     try:
-        img.save(folder + filename[:filename.find(".")] + "_text.jpg", quality=95)
+        img.save(folder + filename[:filename.find(".")] + "_baby.jpg", quality=95)
     except:
         print(filename, "did not work")
         return
@@ -169,7 +169,7 @@ def main():
     destination_entry.pack(fill='x', expand=True)
 
     #csv
-    csv_label = ttk.Label(root, text="Paste the path to the csv file here:")
+    csv_label = ttk.Label(root, text="Paste the path to the csv file here (baby photos only):")
     csv_label.pack(fill='x', expand=True)
 
     csv_entry = ttk.Button(root, text="Select File", command=lambda: file_select(root, csv_file))
